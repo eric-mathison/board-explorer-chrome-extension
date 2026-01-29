@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [
     react(),
     crx({ manifest }),
-    zip({ outDir: "release", outFileName: "release.zip" }),
+    zip({ outDir: "release", outFileName: "board-explorer-chrome-extension.zip" }),
   ],
   build: {
     // keep default; the crx plugin handles extension bundling
