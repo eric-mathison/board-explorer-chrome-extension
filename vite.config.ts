@@ -6,6 +6,7 @@ import zip from "vite-plugin-zip-pack";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "./",
   plugins: [
     react(),
     crx({ manifest }),
@@ -13,10 +14,5 @@ export default defineConfig({
   ],
   build: {
     // keep default; the crx plugin handles extension bundling
-  },
-  server: {
-    cors: {
-      origin: [/chrome-extension:\/\//],
-    },
   },
 });

@@ -102,7 +102,7 @@ export default function App() {
             details.
           </p>
         )}
-        {console.log(data)}
+        
         {data && (
           <div>
             <div className="mb-2">

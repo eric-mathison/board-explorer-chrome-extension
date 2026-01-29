@@ -58,7 +58,6 @@ async function runFetchForPage() {
 
     const pinMatch = href.match(/pin\/(?:[A-Za-z0-9_-]+)/);
     if (pinMatch) {
-      console.log("Detected pin URL");
       const id = pinMatch[0].split("/").pop()!;
       const json = await api.fetchAllPaginatedData(id, "pin");
       sendDataToUI({
@@ -74,7 +73,6 @@ async function runFetchForPage() {
       /\/([A-Za-z0-9_-]+)\/([A-Za-z0-9_-]+)\/([A-Za-z0-9_-]+)\/?(?:\?|$)/,
     );
     if (sectionMatch && !href.includes("/pin/")) {
-      console.log("Detected board section URL");
       const username = sectionMatch[1];
       const boardSlug = sectionMatch[2];
       const sectionSlug = sectionMatch[3];
@@ -89,7 +87,6 @@ async function runFetchForPage() {
       /\/([A-Za-z0-9_-]+)\/([A-Za-z0-9_-]+)\/?(?:\?|$)/,
     );
     if (boardMatch && !href.includes("/pin/")) {
-      console.log("Detected board URL");
       const username = boardMatch[1];
       const boardSlug = boardMatch[2];
       const boardId = `${username}/${boardSlug}`;

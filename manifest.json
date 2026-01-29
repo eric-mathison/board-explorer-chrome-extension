@@ -35,6 +35,33 @@
       "run_at": "document_idle"
     }
   ],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/entry-DVGKxDZQ.css"],
+      "matches": [
+        "https://*.pinterest.com/*",
+        "https://*.pinterest.co.uk/*",
+        "https://*.pinterest.ca/*",
+        "https://*.pinterest.de/*",
+        "https://*.pinterest.fr/*",
+        "https://*.pinterest.es/*",
+        "https://*.pinterest.it/*",
+        "https://*.pinterest.at/*",
+        "https://*.pinterest.ch/*",
+        "https://*.pinterest.cl/*",
+        "https://*.pinterest.com.au/*",
+        "https://*.pinterest.com.mx/*",
+        "https://*.pinterest.dk/*",
+        "https://*.pinterest.ie/*",
+        "https://*.pinterest.jp/*",
+        "https://*.pinterest.nz/*",
+        "https://*.pinterest.ph/*",
+        "https://*.pinterest.pt/*",
+        "https://*.pinterest.se/*",
+        "https://*.pinterest.ru/*"
+      ]
+    }
+  ],
   "action": {
     "default_title": "Board Explorer"
   },
