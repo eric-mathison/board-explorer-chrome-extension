@@ -197,7 +197,7 @@ export default function App() {
               {data.type === "pin" && (
                 <div className="mb-2">
                   <div>
-                    <strong>Title:</strong> {data.json?.title}
+                    <strong>Title:</strong> {data.json?.title || data.json?.rich_summary?.display_name}
                   </div>
                   <div>
                     <strong>Visibility:</strong> {data.json?.privacy}
@@ -229,6 +229,11 @@ export default function App() {
                   <div>
                     <strong>Favorite Count:</strong> {data.json?.favorite_user_count}
                   </div>
+                  {data.json?.reaction_counts && (
+                    <div>
+                      <strong>Total Reactions:</strong> {Object.values(data.json.reaction_counts).reduce((sum: number, count: any) => sum + count, 0)}
+                    </div>
+                  )}
                 </div>
               )}
               {data.type === "section" && (

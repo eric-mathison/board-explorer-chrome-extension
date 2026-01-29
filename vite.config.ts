@@ -1,18 +1,28 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { crx } from "@crxjs/vite-plugin";
-import manifest from "./manifest.json";
-import zip from "vite-plugin-zip-pack";
+import path from 'node:path'
+import { crx } from '@crxjs/vite-plugin'
+import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
+import zip from 'vite-plugin-zip-pack'
+import manifest from './manifest.config.js'
+import { name, version } from './package.json'
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  base: "./",
+  resolve: {
+    alias: {
+      '@': `${path.resolve(__dirname, 'src')}`,
+    },
+  },
   plugins: [
     react(),
     crx({ manifest }),
-    zip({ outDir: "release", outFileName: "board-explorer-chrome-extension.zip" }),
+    zip({ outDir: 'release', outFileName: `crx-${name}-${version}.zip` }),
   ],
-  build: {
-    // keep default; the crx plugin handles extension bundling
+  server: {
+    cors: {
+      origin: [
+        /chrome-extension:\/\//,
+      ],
+    },
   },
-});
+})
+
