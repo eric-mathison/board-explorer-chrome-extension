@@ -2,9 +2,8 @@
   "manifest_version": 3,
   "name": "Board Explorer",
   "version": "0.1.0",
-  "description": "Explore Pinterest boards, users, sections, and pins in a right sidebar overlay.",
+  "description": "Explore Pinterest resources (users, boards, sections, and pins) directly from any Pinterest page. View detailed metadata, statistics, and raw JSON data in a beautiful sidebar overlay.",
   "permissions": ["scripting", "activeTab", "storage"],
-  "host_permissions": ["https://api.pinterest.com/*"],
   "background": {
     "service_worker": "src/background/service-worker.ts"
   },
