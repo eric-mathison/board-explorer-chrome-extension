@@ -1,0 +1,20 @@
+@import 'tailwindcss';
+
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* Minimal reset for the injected sidebar to keep styles stable */
+#board-explorer-root {
+  all: initial; /* start with baseline and apply local styles */
+}
+
+#board-explorer-root * {
+  box-sizing: border-box;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial;
+}
