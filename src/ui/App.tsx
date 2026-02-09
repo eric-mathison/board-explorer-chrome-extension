@@ -1,33 +1,34 @@
-import React, { useEffect, useState } from "react";
-import Collapse from "./components/Collapse";
-import JSONViewer from "./components/JSONViewer";
+import React, { useEffect, useState } from "react"
+import Collapse from "./components/Collapse"
+import JSONViewer from "./components/JSONViewer"
+import "../styles/index.css"
 
 export default function App() {
-  const [open, setOpen] = useState(true);
-  const [data, setData] = useState<any | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [open, setOpen] = useState(true)
+  const [data, setData] = useState<any | null>(null)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     function handler(e: Event) {
-      const ev = e as CustomEvent;
-      if (ev.detail?.action === "open") setOpen(true);
-      if (ev.detail?.action === "close") setOpen(false);
-      if (ev.detail?.payload) setData(ev.detail.payload);
+      const ev = e as CustomEvent
+      if (ev.detail?.action === "open") setOpen(true)
+      if (ev.detail?.action === "close") setOpen(false)
+      if (ev.detail?.payload) setData(ev.detail.payload)
     }
 
-    document.addEventListener("board-explorer-data", handler as EventListener);
+    document.addEventListener("board-explorer-data", handler as EventListener)
     return () =>
       document.removeEventListener(
         "board-explorer-data",
         handler as EventListener,
-      );
-  }, []);
+      )
+  }, [])
 
   const copyJSON = (jsonData: any) => {
-    navigator.clipboard.writeText(JSON.stringify(jsonData, null, 2));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+    navigator.clipboard.writeText(JSON.stringify(jsonData, null, 2))
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   return (
     <div
@@ -102,7 +103,7 @@ export default function App() {
             details.
           </p>
         )}
-        
+
         {data && (
           <div>
             <div className="mb-2">
@@ -146,12 +147,8 @@ export default function App() {
                     <strong>Pin Count:</strong> {data.json?.pin_count}
                   </div>
                   <div>
-                    <strong>Story Pin Count:</strong>{" "}
-                    {data.json?.story_pin_count}
-                  </div>
-                  <div>
-                    <strong>Video Pin Count:</strong>{" "}
-                    {data.json?.video_pin_count}
+                    <strong>Boardless Pin Count:</strong>{" "}
+                    {data.boardlessPinsJson?.length}
                   </div>
                   <div>
                     <strong>Follower Count:</strong> {data.json?.follower_count}
@@ -195,9 +192,10 @@ export default function App() {
                 </div>
               )}
               {data.type === "pin" && (
-                <div className="mb-2">
+                <div className="mb-2 wrap-break-word">
                   <div>
-                    <strong>Title:</strong> {data.json?.title || data.json?.rich_summary?.display_name}
+                    <strong>Title:</strong>{" "}
+                    {data.json?.title || data.json?.rich_summary?.display_name}
                   </div>
                   <div>
                     <strong>Visibility:</strong> {data.json?.privacy}
@@ -210,6 +208,18 @@ export default function App() {
                   </div>
                   <div>
                     <strong>Image Url:</strong> {data.json?.images.orig.url}
+                  </div>
+                  <div>
+                    <strong>Video Url:</strong>{" "}
+                    {data.json?.videos?.video_list?.V_720P?.url ||
+                      data.json?.story_pin_data?.pages[0].blocks[0]?.video
+                        ?.video_list?.V_HLSV3_MOBILE?.url ||
+                      data.json?.story_pin_data?.pages[0].blocks[0]?.video
+                        ?.video_list?.V_EXP6?.url ||
+                      data.json?.story_pin_data?.pages[0].blocks[0]?.video
+                        ?.video_list?.V_EXP5?.url ||
+                      data.json?.story_pin_data?.pages[0].blocks[0]?.video
+                        ?.video_list?.V_EXP3?.url}
                   </div>
                   <div>
                     <strong>Link:</strong> {data.json?.link}
@@ -227,11 +237,16 @@ export default function App() {
                     <strong>Share Count:</strong> {data.json?.share_count}
                   </div>
                   <div>
-                    <strong>Favorite Count:</strong> {data.json?.favorite_user_count}
+                    <strong>Favorite Count:</strong>{" "}
+                    {data.json?.favorite_user_count}
                   </div>
                   {data.json?.reaction_counts && (
                     <div>
-                      <strong>Total Reactions:</strong> {Object.values(data.json.reaction_counts).reduce((sum: number, count: any) => sum + count, 0)}
+                      <strong>Total Reactions:</strong>{" "}
+                      {Object.values(data.json.reaction_counts).reduce(
+                        (sum: number, count: any) => sum + count,
+                        0,
+                      )}
                     </div>
                   )}
                 </div>
@@ -249,11 +264,10 @@ export default function App() {
                   </div>
                 </div>
               )}
-
             </Collapse>
 
             <Collapse summary={<span>Raw JSON</span>}>
-            <div style={{ marginBottom: 8 }}>
+              <div style={{ marginBottom: 8 }}>
                 <button
                   onClick={() => copyJSON(data.json)}
                   className="px-2 py-1 rounded border text-sm"
@@ -264,16 +278,30 @@ export default function App() {
               <JSONViewer data={data.json} />
             </Collapse>
 
-            {data.sectionJson && (
+            {data.boardlessPinsJson?.length > 0 && (
+              <Collapse summary={<span>Raw Boardless Pins JSON</span>}>
+                <div style={{ marginBottom: 8 }}>
+                  <button
+                    onClick={() => copyJSON(data.boardlessPinsJson)}
+                    className="px-2 py-1 rounded border text-sm"
+                  >
+                    {copied ? "Copied!" : "Copy JSON"}
+                  </button>
+                </div>
+                <JSONViewer data={data.boardlessPinsJson} />
+              </Collapse>
+            )}
+
+            {data.sectionJson?.length > 0 && (
               <Collapse summary={<span>Raw Section JSON</span>}>
                 <div style={{ marginBottom: 8 }}>
-                <button
-                  onClick={() => copyJSON(data.sectionJson)}
-                  className="px-2 py-1 rounded border text-sm"
-                >
-                  {copied ? "Copied!" : "Copy JSON"}
-                </button>
-              </div>
+                  <button
+                    onClick={() => copyJSON(data.sectionJson)}
+                    className="px-2 py-1 rounded border text-sm"
+                  >
+                    {copied ? "Copied!" : "Copy JSON"}
+                  </button>
+                </div>
                 <JSONViewer data={data.sectionJson} />
               </Collapse>
             )}
@@ -281,13 +309,13 @@ export default function App() {
             {data.pinJson && (
               <Collapse summary={<span>Raw Pin JSON</span>}>
                 <div style={{ marginBottom: 8 }}>
-                <button
-                  onClick={() => copyJSON(data.pinJson)}
-                  className="px-2 py-1 rounded border text-sm"
-                >
-                  {copied ? "Copied!" : "Copy JSON"}
-                </button>
-              </div>
+                  <button
+                    onClick={() => copyJSON(data.pinJson)}
+                    className="px-2 py-1 rounded border text-sm"
+                  >
+                    {copied ? "Copied!" : "Copy JSON"}
+                  </button>
+                </div>
                 <JSONViewer data={data.pinJson} />
               </Collapse>
             )}
@@ -295,13 +323,13 @@ export default function App() {
             {data.json.show_recipe_cta && (
               <Collapse summary={<span>Recipe JSON</span>}>
                 <div style={{ marginBottom: 8 }}>
-                <button
-                  onClick={() => copyJSON(data.json.rich_metadata.recipe)}
-                  className="px-2 py-1 rounded border text-sm"
-                >
-                  {copied ? "Copied!" : "Copy JSON"}
-                </button>
-              </div>
+                  <button
+                    onClick={() => copyJSON(data.json.rich_metadata.recipe)}
+                    className="px-2 py-1 rounded border text-sm"
+                  >
+                    {copied ? "Copied!" : "Copy JSON"}
+                  </button>
+                </div>
                 <JSONViewer data={data.json.rich_metadata.recipe} />
               </Collapse>
             )}
@@ -309,5 +337,5 @@ export default function App() {
         )}
       </div>
     </div>
-  );
+  )
 }

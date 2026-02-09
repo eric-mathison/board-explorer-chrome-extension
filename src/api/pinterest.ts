@@ -96,6 +96,32 @@ export async function fetchBoardSections(boardId: string, boardUrl?: string) {
   return res.json();
 }
 
+export async function fetchBoardlessPins(userId: string, bookmark: string | null) {
+  const url = "https://www.pinterest.com/resource/BoardlessPinsResource/get/";
+  const data = {
+    options: {
+      userId,
+      bookmarks: [bookmark],
+      field_set_key: "react_grid_pin",
+      page_size: 50,
+    },
+    context: {},
+  };
+  const params = new URLSearchParams({
+    data: JSON.stringify(data),
+    source_url: `/${userId}/`,
+  });
+
+  const res = await fetch(url + "?" + params.toString(), {
+    method: "GET",
+    headers: {
+      "x-pinterest-pws-handler": `www/${userId}.js`,
+    },
+  });
+  if (!res.ok) throw new Error("Failed to fetch boardless pins");
+  return res.json();
+}
+
 export async function fetchBoard(boardId: string): Promise<Board> {
   const url = "https://www.pinterest.com/resource/BoardResource/get/";
   const data = {
@@ -173,7 +199,7 @@ export async function fetchUser(userId: string) {
 
 export async function fetchAllPaginatedData(
   id: string,
-  type: "pin" | "board" | "user" | "boardPins" | "boardSections" | "sectionPins",
+  type: "pin" | "board" | "user" | "boardPins" | "boardSections" | "sectionPins" | "boardlessPins",
   boardUrl?: string,
 ) {
   let allData = [];
@@ -195,6 +221,8 @@ export async function fetchAllPaginatedData(
       result = await fetchBoardSections(id, boardUrl);
     } else if (type === "sectionPins") {
       result = await fetchBoardSectionPins(id, bookmark, boardUrl);
+    } else if (type === "boardlessPins") {
+      result = await fetchBoardlessPins(id, bookmark);
     }
 
     const data = result.resource_response.data;

@@ -116,12 +116,14 @@ async function runFetchForPage() {
     const userMatch = href.match(/\/([A-Za-z0-9_-]+)\/?(?:\?|$)/);
     if (userMatch) {
       const username = userMatch[1];
-      const json = await api.fetchAllPaginatedData(username, "user");
+      const userJson = await api.fetchAllPaginatedData(username, "user");
+      const boardlessPinsJson = await api.fetchAllPaginatedData(username, "boardlessPins");
       sendDataToUI({
         type: "user",
         id: username,
         resource: "/resource/UserResource/get/",
-        json,
+        json: userJson,
+        boardlessPinsJson,
       });
       return;
     }
